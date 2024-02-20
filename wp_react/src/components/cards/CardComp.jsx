@@ -1,43 +1,49 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Card, Col, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { urlSito } from "../../var"; 
 
 export default function CardComp({ e, index, articoloSingolo }) {
   
   const navigate = useNavigate();
 
+  const location = useLocation();
+
   const [tags, setTags] = useState([]);
 
-  let arrayCategorie = [];
+  const [arrayCategorie, setArrayCategorie] = useState([]);
+  
+  useEffect(() => {
+      axios(urlSito + "categories")
+        .then((response) => {
+          setTags(response.data);
 
-  // per le immagini: prendere il featured media
-  // fare poi una chiamata fetch a: 
-  // https://justatip.it/wp-json/wp/v2/media?parent="qui_metti_il_feature_media"
+        })
+        .catch((error) => {
+          console.error("Error fetching data: ", error);
+        });
+    }, []);
 
-  // useEffect(() => {
-  //     axios(urlSito + "tags")
-  //       .then((response) => {
-  //         setTags(response.data);
-  //         creaCategorie();
-
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching data: ", error);
-  //       });
-  //   }, []);
+    useEffect(() => {
+      creaCategorie();
+    }, [tags]); // Chiamata a creaCategorie ogni volta che tags cambia
+    
 
 
-  //   function creaCategorie() {
-  //     e.tags.forEach(singleTag => {
-  //       if(tags.filter(tag => singleTag.includes(tag.id))) {
-  //           arrayCategorie.push(tag.name)
-  //       }
-  //       console.log(arrayCategorie);
-  //     }); 
-      
-  //   }
+    function creaCategorie() {
+      const categorie = e.categories.map(singleCategoryId => {
+        const category = tags.find(t => t.id === singleCategoryId); // Trova la categoria corrispondente
+        return category ? { id: category.id, name: category.name } : null; // Ritorna un oggetto con id e nome se trovato
+      }).filter(Boolean); // Filtra eventuali valori null o undefined
+    
+      setArrayCategorie(categorie); // Aggiorna lo stato con gli oggetti delle categorie trovati
+    }
+    
+    function handleclick(obj) {
+      navigate("tag/"+obj.id+"/"+btoa(obj.name))
+    }
+    
 
 
   return (
@@ -51,6 +57,13 @@ export default function CardComp({ e, index, articoloSingolo }) {
         <Card.Body>
           {/* <Card.Title>{e.title.rendered}</Card.Title> */}
           <Card.Title dangerouslySetInnerHTML={{ __html: e.title.rendered }} />
+          {location.pathname === '/' && (
+            <h6 className="text-center">
+              {arrayCategorie && arrayCategorie.map((e, index) => (
+                <span className="me-2 fs-6" dangerouslySetInnerHTML={{ __html: e.name }} key={index} onClick={() => handleclick(e)}></span>
+              ))}
+            </h6>
+          )}  
           <Card.Text dangerouslySetInnerHTML={{ __html: e.excerpt.rendered }} />
           <Button
             onClick={() => {

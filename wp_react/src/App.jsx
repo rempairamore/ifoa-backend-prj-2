@@ -7,6 +7,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import NavBar from "./components/navbar/NavBar";
 import ArticlePage from './pages/ArticlePage';
 import SearchPage from './pages/SearchPage';
+import TagPage from './pages/TagPage';
 
 
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/articolo/:indexID" element={<ArticlePage />} />
         <Route path="/search-result/:searchTerm" element={<SearchPage />} />
+        <Route path="/tag/:tagID/:idName" element={<TagPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       {/* <PlayerComp /> */}

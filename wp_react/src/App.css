@@ -16,3 +16,20 @@
   align-items: center;
   justify-content: space-around;
 }
+
+.spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+  }
+
+h6 span:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color: aquamarine;
+}
+
+h6 span {
+    color: blue;
+}

@@ -4,18 +4,18 @@ import axios from 'axios';
 import { Row, Spinner } from 'react-bootstrap'; 
 import CardComp from './CardComp';
 
-export default function MultipleCardsSearch({ termineCercato }) {
+export default function MultipleCardsTag({ tagcercato }) {
     const [articoli, setArticoli] = useState([]);
     const [isLoading, setIsLoading] = useState(false); 
 
     useEffect(() => {
-        if (!termineCercato) {
+        if (!tagcercato) {
             // Se non c'è un termine di ricerca, evito di fare la chiamata API e pulisco gli articoli esistenti
             setArticoli([]);
             return;
         }
         setIsLoading(true); 
-        axios(urlSito + 'posts/?per_page=16&search=' + termineCercato)
+        axios(urlSito + 'posts/?per_page=16&categories=' + tagcercato)
             .then(response => {
                 setArticoli(response.data);
                 setIsLoading(false); 
@@ -25,7 +25,7 @@ export default function MultipleCardsSearch({ termineCercato }) {
                 setIsLoading(false); 
             });
 
-    }, [termineCercato]);
+    }, [tagcercato]);
 
     return (
         <>
