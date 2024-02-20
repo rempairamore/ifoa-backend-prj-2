@@ -1,0 +1,1 @@
+export const urlSito = 'https://justatip.it/wp-json/wp/v2/';
